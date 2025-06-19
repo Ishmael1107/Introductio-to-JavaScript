@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html 
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body> 
+        <h1 id="heading"onclick="makeitshort()">Keep Coding</h1>
+        <p id="addition"></p>
+        <script>
+            document.getElementById("addition").innerHTML = addNumbers(10, 20);
+            
+            function makeitshort(){
+               if(document.getElementById("heading").innerHTML=='Keep Coding'){
+                   document.getElementById("heading").innerHTML='Week Four'
+               } else {
+                   document.getElementById("heading").innerHTML='Keep Coding'
+               } 
+            }
+            
+            function addNumbers(num1, num2){
+                return num1 + num2;
+            }
+        </script>
+    </body>
+</html>
