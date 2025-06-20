@@ -1,0 +1,189 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <table border="1">
+           <tr>
+                <td colspan="4">
+                    <input type="text" id="inputBox" value="0"/>
+                </td>
+           </tr>
+        <tr>
+            <td colspan="4" style="text-align: right;">
+            <span id="sciToggle" onclick="toggleScientificMenu()" style="cursor: pointer; font-size: 18px;">▼</span>
+        </td>
+
+        </tr>
+            <tr id="sciRow" style="display:none;">
+                <td class="scientific" onclick="scientificCalc('sin')">sin</td>
+                <td class="scientific" onclick="scientificCalc('cos')">cos</td>
+                <td class="scientific" onclick="scientificCalc('tan')">tan</td>
+                <td class="scientific" onclick="scientificCalc('log')">log</td>
+        </tr>
+        <!-- $PLACEHOLDER$ is on line 20 in your code. -->
+           <tr>
+                <td class="clear" onclick="btnACPressed()">AC</td>
+                <td class="special" onclick="toggleSign()">+/-</td>
+                <td class="special" onclick="calculatePercentage()">%</td>
+                <td class="operator" onclick="operatorBtnPressed('/')">/</td>
+            </tr> 
+            <tr>   
+                <td class="digit" onclick="digitBtnPressed(7)">7</td>
+                <td class="digit" onclick="digitBtnPressed(8)">8</td>
+                <td class="digit" onclick="digitBtnPressed(9)">9</td>
+                <td class="operator" onclick="operatorBtnPressed('x')">x</td>
+           </tr>
+           <tr>
+                <td class="digit" onclick="digitBtnPressed(4)">4</td>
+                <td class="digit" onclick="digitBtnPressed(5)">5</td>
+                <td class="digit" onclick="digitBtnPressed(6)">6</td>
+                <td class="operator" onclick="operatorBtnPressed('-')">-</td>
+           </tr>
+           <tr>
+                <td class="digit" onclick="digitBtnPressed(1)">1</td>
+                <td class="digit" onclick="digitBtnPressed(2)">2</td>
+                <td class="digit" onclick="digitBtnPressed(3)">3</td>
+                <td class="operator" onclick="operatorBtnPressed('+')">+</td>
+           </tr>
+           <tr>
+                <td class="digit" onclick="digitBtnPressed(0)">0</td>
+                <td class="special"onclick="addDecimal()">.</td>
+                <td class="special" onclick="backspace()">←</td>
+                <td class="equals" onclick="equalsBtnPressed()">=</td>
+           </tr>
+        </table>
+
+        <script>
+            var newLine = true; //Boolean variable. Determines if the next thing the user types should be on the new line.
+            var value1;
+            var currentOperator;
+
+            //Event handler for when any digit button is pressed.
+            function digitBtnPressed(button){
+                var input = document.getElementById("inputBox");
+                if(newLine || input.value === "0"){
+                    input.value = button;
+                    newLine = false;
+                } else { 
+                    input.value += button;
+                }
+            }
+            //Event handler for when the AC button is pressed.
+            function btnACPressed(){
+                document.getElementById("inputBox").value = 0;
+                newLine = true;
+            }
+    function addDecimal(){
+        var input = document.getElementById("inputBox");
+        if (newLine) {
+            input.value = "0.";
+            newLine = false;
+        } else if (!input.value.includes(".")) {
+            input.value += ".";
+        } else {
+            alert("Decimal point already exists.");
+        }
+    }
+                function toggleSign(){
+                var input = document.getElementById("inputBox");
+                input.value = parseFloat(input.value) * -1;
+        }
+
+            function calculatePercentage(){
+                var input = document.getElementById("inputBox");
+               input.value = parseFloat(input.value) / 100;
+      }
+            //Event handler when backspace is pressed
+            function backspace() {
+                var input = document.getElementById("inputBox");
+                var val = input.value;
+
+            // Remove last character
+                val = val.slice(0, -1);
+
+            // Reset to "0" if empty or just "-"
+                if (val === "" || val === "-") {
+                input.value = "0";
+                newLine = true;
+            } else {
+            input.value = val;
+        }
+    }
+
+    function scientificCalc(func){
+        var input = document.getElementById("inputBox");
+        var val = parseFloat(input.value);
+        var result;
+    
+        switch(func){
+            case 'sin': result = Math.sin(val * Math.PI / 180); break;
+            case 'cos': result = Math.cos(val * Math.PI / 180); break;
+            case 'tan': result = Math.tan(val * Math.PI / 180); break;
+            case 'log':
+                if (val <= 0) {
+                    result = "Invalid input";
+                } else {
+                    result = Math.log10(val);
+                }
+                break;
+        }
+        if (typeof result === "number" && isFinite(result)) {
+            input.value = parseFloat(result.toFixed(8));
+        } else {
+            input.value = result;
+        }
+        newLine = true;
+    }
+
+        function toggleScientificMenu() {
+            var row = document.getElementById("sciRow");
+            var toggleBtn = document.getElementById("sciToggle");
+
+         if (row.style.display === "none") {
+             row.style.display = "table-row";
+             toggleBtn.innerHTML = "▲";
+        } else {
+            row.style.display = "none";
+            toggleBtn.innerHTML = "▼";
+        }
+    }
+
+            function operatorBtnPressed(operator){
+                currentOperator = operator;
+                value1 = parseFloat(document.getElementById("inputBox").value);
+                newLine = true;
+            }
+             //Event handler for when the equals button is pressed.
+             function equalsBtnPressed(){
+    var value2 = parseFloat(document.getElementById("inputBox").value);
+    var finalTotal;
+
+    switch(currentOperator){
+        case "+":
+            finalTotal = value1 + value2;
+            break;
+        case "-":
+            finalTotal = value1 - value2;
+            break;
+        case "/":
+            if (value2 === 0) {
+                finalTotal = "Can't divide by zero";
+            } else {
+                finalTotal = value1 / value2;
+            }
+            break;
+        case "x":
+            finalTotal = value1 * value2;
+            break;
+    }
+
+    document.getElementById("inputBox").value = finalTotal;
+    value1 = 0;
+    newLine = true;
+}
+
+        </script>
+    </body>
+
+</html>
